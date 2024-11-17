@@ -71,7 +71,7 @@ class ExperimentBuilder(nn.Module):
 
         self.optimizer = optim.Adam(self.parameters(), lr=learning_rate, amsgrad=False,
                                     weight_decay=weight_decay_coefficient)
-        self.z_rate_scheduler = optim.lr_scheduler.CosineAnnealingLR(self.optimizer,
+        self.learning_rate_scheduler = optim.lr_scheduler.CosineAnnealingLR(self.optimizer,
                                                                             T_max=num_epochs,
                                                                             eta_min=0.00002)
         # Generate the directory names
