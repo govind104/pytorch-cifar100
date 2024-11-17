@@ -4,6 +4,7 @@ import torch.optim as optim
 import torch.nn.functional as F
 import tqdm
 import os
+
 import numpy as np
 import time
 
@@ -14,7 +15,7 @@ matplotlib.rcParams.update({'font.size': 8})
 
 class ExperimentBuilder(nn.Module):
     def __init__(self, network_model, experiment_name, num_epochs, train_data, val_data,
-                 test_data, weight_decay_coefficient, use_gpu, continue_from_epoch=-1):
+                 test_data, weight_decay_coefficient, learning_rate, use_gpu, continue_from_epoch=-1):
         """
         Initializes an ExperimentBuilder object. Such an object takes care of running training and evaluation of a deep net
         on a given dataset. It also takes care of saving per epoch models and automatically inferring the best val model
@@ -26,6 +27,7 @@ class ExperimentBuilder(nn.Module):
         :param val_data: An object of the DataProvider type. Contains the val set.
         :param test_data: An object of the DataProvider type. Contains the test set.
         :param weight_decay_coefficient: A float indicating the weight decay to use with the adam optimizer.
+        :param learning_rate: A float indicating the learning rate to use with the adam optimizer.
         :param use_gpu: A boolean indicating whether to use a GPU or not.
         :param continue_from_epoch: An int indicating whether we'll start from scrach (-1) or whether we'll reload a previously saved model of epoch 'continue_from_epoch' and continue training from there.
         """
@@ -67,9 +69,9 @@ class ExperimentBuilder(nn.Module):
         print('Total number of conv layers', num_conv_layers)
         print('Total number of linear layers', num_linear_layers)
 
-        self.optimizer = optim.Adam(self.parameters(), amsgrad=False,
+        self.optimizer = optim.Adam(self.parameters(), lr=learning_rate, amsgrad=False,
                                     weight_decay=weight_decay_coefficient)
-        self.learning_rate_scheduler = optim.lr_scheduler.CosineAnnealingLR(self.optimizer,
+        self.z_rate_scheduler = optim.lr_scheduler.CosineAnnealingLR(self.optimizer,
                                                                             T_max=num_epochs,
                                                                             eta_min=0.00002)
         # Generate the directory names
