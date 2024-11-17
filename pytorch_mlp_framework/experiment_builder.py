@@ -152,7 +152,10 @@ class ExperimentBuilder(nn.Module):
         for name, value in named_parameters:
             if 'weight' in name:
                 all_grads.append(value.grad.abs().mean().item())
-                layers.append(name.replace('layer_dict.', '').replace('.', '').replace('_weights','').replace('.weights','_'))
+                if 'layer.dict' in name:
+                    layers.append(name[11:].replace('.layer_dict.', '_').replace('.', '').replace('.weight',''))
+                else:
+                    layers.append('weight_' + name.replace('.weight',''))
         ########################################
             
         
