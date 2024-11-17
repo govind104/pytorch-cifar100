@@ -7,7 +7,7 @@ import mlp.data_providers as data_providers
 from pytorch_mlp_framework.arg_extractor import get_args
 from pytorch_mlp_framework.experiment_builder import ExperimentBuilder
 from pytorch_mlp_framework.model_architectures import *
-import os 
+import os
 # os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 args = get_args()  # get arguments from command line
@@ -67,6 +67,7 @@ conv_experiment = ExperimentBuilder(network_model=custom_conv_net,
                                     experiment_name=args.experiment_name,
                                     num_epochs=args.num_epochs,
                                     weight_decay_coefficient=args.weight_decay_coefficient,
+                                    learning_rate = args.learning_rate,
                                     use_gpu=args.use_gpu,
                                     continue_from_epoch=args.continue_from_epoch,
                                     train_data=train_data_loader, val_data=val_data_loader,
